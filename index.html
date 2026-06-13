@@ -15,6 +15,7 @@
           <p>
             上傳 MP4、MOV、MKV、AVI、WEBM 等影片，直接在瀏覽器中轉成可下載的音檔。
           </p>
+          <a class="hero-link" href="command.html">開啟 GitHub Pages 指令產生器</a>
         </div>
 
         <form class="converter" id="converter-form">
@@ -115,6 +116,47 @@
               </div>
             </div>
             <textarea id="transcript-output" readonly></textarea>
+          </section>
+
+          <section class="command-panel" aria-label="PowerShell 指令產生器">
+            <div class="command-header">
+              <div>
+                <p class="panel-label">PowerShell 指令產生器</p>
+                <h2>在自己的電腦直接轉檔</h2>
+              </div>
+              <button class="text-button" id="copy-command-button" type="button">
+                複製指令
+              </button>
+            </div>
+
+            <label class="wide-field">
+              <span>影片或音訊完整路徑</span>
+              <input
+                id="local-path-input"
+                type="text"
+                placeholder="C:\Users\Me\Videos\meeting.mp4"
+              />
+            </label>
+
+            <label class="wide-field">
+              <span>輸出資料夾或音檔檔名</span>
+              <input
+                id="output-path-input"
+                type="text"
+                placeholder="留空會輸出到原檔旁邊"
+              />
+            </label>
+
+            <div class="command-actions">
+              <button class="secondary-button" id="generate-audio-command-button" type="button">
+                產生轉音檔指令
+              </button>
+              <button class="secondary-button" id="generate-transcript-command-button" type="button">
+                產生逐字稿指令
+              </button>
+            </div>
+
+            <textarea id="command-output" readonly></textarea>
           </section>
 
           <section class="progress-panel" aria-live="polite">

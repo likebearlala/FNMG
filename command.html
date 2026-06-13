@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PowerShell 指令產生器｜FNMG</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="workspace command-workspace" aria-labelledby="page-title">
+        <div class="intro">
+          <p class="eyebrow">FNMG Command Builder</p>
+          <h1 id="page-title">PowerShell 指令產生器</h1>
+          <p>
+            輸入本機影片或音訊路徑，產生可複製的 FFmpeg 轉音檔或 Whisper 逐字稿指令。
+          </p>
+        </div>
+
+        <form class="converter" id="command-form">
+          <section class="command-panel" aria-label="PowerShell 指令產生器">
+            <div class="command-header">
+              <div>
+                <p class="panel-label">本機執行</p>
+                <h2>不用上傳檔案</h2>
+              </div>
+              <a class="text-button" href="index.html">回主頁</a>
+            </div>
+
+            <label class="wide-field">
+              <span>影片或音訊完整路徑</span>
+              <input
+                id="local-path-input"
+                type="text"
+                placeholder="C:\Users\Me\Videos\meeting.mp4"
+                autocomplete="off"
+              />
+            </label>
+
+            <label class="wide-field">
+              <span>輸出資料夾或音檔檔名</span>
+              <input
+                id="output-path-input"
+                type="text"
+                placeholder="留空會輸出到原檔旁邊"
+                autocomplete="off"
+              />
+            </label>
+
+            <section class="settings compact-settings" aria-label="指令設定">
+              <label>
+                <span>輸出格式</span>
+                <select id="format-select">
+                  <option value="mp3">MP3</option>
+                  <option value="wav">WAV</option>
+                  <option value="aac">AAC</option>
+                  <option value="ogg">OGG</option>
+                  <option value="flac">FLAC</option>
+                  <option value="m4a">M4A</option>
+                </select>
+              </label>
+
+              <label>
+                <span>音訊位元率</span>
+                <select id="bitrate-select">
+                  <option value="128k">128 kbps</option>
+                  <option value="192k" selected>192 kbps</option>
+                  <option value="256k">256 kbps</option>
+                  <option value="320k">320 kbps</option>
+                </select>
+              </label>
+
+              <label>
+                <span>取樣率</span>
+                <select id="sample-rate-select">
+                  <option value="44100" selected>44.1 kHz</option>
+                  <option value="48000">48 kHz</option>
+                  <option value="96000">96 kHz</option>
+                </select>
+              </label>
+
+              <label>
+                <span>逐字稿語言</span>
+                <select id="transcript-language-select">
+                  <option value="auto" selected>自動偵測</option>
+                  <option value="zh">中文</option>
+                  <option value="en">英文</option>
+                  <option value="ja">日文</option>
+                  <option value="ko">韓文</option>
+                </select>
+              </label>
+            </section>
+
+            <div class="command-actions">
+              <button class="secondary-button" id="generate-audio-command-button" type="button">
+                產生轉音檔指令
+              </button>
+              <button class="secondary-button" id="generate-transcript-command-button" type="button">
+                產生逐字稿指令
+              </button>
+              <button class="text-button" id="copy-command-button" type="button">
+                複製指令
+              </button>
+            </div>
+
+            <textarea id="command-output" readonly></textarea>
+          </section>
+
+          <section class="progress-panel" aria-live="polite">
+            <div class="progress-header">
+              <span id="status-text">等待輸入路徑</span>
+              <span>GitHub Pages 可用</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-bar static-progress"></div>
+            </div>
+          </section>
+        </form>
+      </section>
+    </main>
+
+    <script src="command.js"></script>
+  </body>
+</html>

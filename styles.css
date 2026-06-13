@@ -61,6 +61,10 @@ input {
   align-items: center;
 }
 
+.command-workspace {
+  grid-template-columns: minmax(260px, 0.72fr) minmax(340px, 1.28fr);
+}
+
 .intro {
   padding: 16px 0;
 }
@@ -89,6 +93,24 @@ h1 {
   color: var(--muted);
   font-size: 1.05rem;
   line-height: 1.8;
+}
+
+.hero-link {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 22px;
+  padding: 0 14px;
+  border-radius: 6px;
+  color: #ffffff;
+  background: #374151;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.hero-link:hover {
+  background: #1f2937;
 }
 
 .converter {
@@ -164,7 +186,8 @@ h1 {
 .file-panel,
 .settings,
 .progress-panel,
-.transcript-panel {
+.transcript-panel,
+.command-panel {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--surface);
@@ -225,7 +248,8 @@ dd {
   font-weight: 700;
 }
 
-select {
+select,
+input[type="text"] {
   width: 100%;
   min-height: 44px;
   padding: 0 12px;
@@ -307,15 +331,22 @@ select {
   padding: 16px;
 }
 
-.transcript-header {
+.transcript-header,
+.command-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
 
-.transcript-header .panel-label {
+.transcript-header .panel-label,
+.command-header .panel-label {
   margin: 0;
+}
+
+.command-header h2 {
+  margin: 4px 0 0;
+  font-size: 1.05rem;
 }
 
 .transcript-actions {
@@ -348,6 +379,29 @@ textarea {
   background: #fbfcfe;
 }
 
+.command-panel {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+}
+
+.wide-field {
+  display: grid;
+  gap: 8px;
+}
+
+.wide-field span {
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.command-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 .progress-panel {
   padding: 16px;
 }
@@ -375,6 +429,10 @@ textarea {
   border-radius: inherit;
   background: linear-gradient(90deg, var(--accent), #f19d42);
   transition: width 180ms ease;
+}
+
+.static-progress {
+  width: 100%;
 }
 
 .is-error {
