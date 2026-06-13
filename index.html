@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>影片轉音檔工具</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="workspace" aria-labelledby="page-title">
+        <div class="intro">
+          <p class="eyebrow">Browser Audio Converter</p>
+          <h1 id="page-title">影片轉音檔工具</h1>
+          <p>
+            上傳 MP4、MOV、MKV、AVI、WEBM 等影片，直接在瀏覽器中轉成可下載的音檔。
+          </p>
+        </div>
+
+        <form class="converter" id="converter-form">
+          <label class="drop-zone" id="drop-zone" for="video-input">
+            <input
+              id="video-input"
+              type="file"
+              accept="video/*,.mkv,.avi,.mov,.mp4,.webm,.m4v,.wmv,.flv"
+            />
+            <span class="upload-icon" aria-hidden="true">+</span>
+            <span class="drop-title">選擇或拖放影片</span>
+            <span class="drop-help" id="mode-help">正在檢查轉檔模式</span>
+          </label>
+
+          <section class="file-panel" id="file-panel" hidden>
+            <div>
+              <p class="panel-label">已選影片</p>
+              <h2 id="file-name">尚未選擇檔案</h2>
+            </div>
+            <dl class="file-meta">
+              <div>
+                <dt>大小</dt>
+                <dd id="file-size">-</dd>
+              </div>
+              <div>
+                <dt>類型</dt>
+                <dd id="file-type">-</dd>
+              </div>
+            </dl>
+          </section>
+
+          <section class="settings" aria-label="轉檔設定">
+            <label>
+              <span>輸出格式</span>
+              <select id="format-select">
+                <option value="mp3">MP3</option>
+                <option value="wav">WAV</option>
+                <option value="aac">AAC</option>
+                <option value="ogg">OGG</option>
+                <option value="flac">FLAC</option>
+                <option value="m4a">M4A</option>
+              </select>
+            </label>
+
+            <label>
+              <span>音訊位元率</span>
+              <select id="bitrate-select">
+                <option value="128k">128 kbps</option>
+                <option value="192k" selected>192 kbps</option>
+                <option value="256k">256 kbps</option>
+                <option value="320k">320 kbps</option>
+              </select>
+            </label>
+
+            <label>
+              <span>取樣率</span>
+              <select id="sample-rate-select">
+                <option value="44100" selected>44.1 kHz</option>
+                <option value="48000">48 kHz</option>
+                <option value="96000">96 kHz</option>
+              </select>
+            </label>
+
+            <label>
+              <span>逐字稿語言</span>
+              <select id="transcript-language-select">
+                <option value="auto" selected>自動偵測</option>
+                <option value="zh">中文</option>
+                <option value="en">英文</option>
+                <option value="ja">日文</option>
+                <option value="ko">韓文</option>
+              </select>
+            </label>
+          </section>
+
+          <div class="actions">
+            <button class="primary-button" id="convert-button" type="submit" disabled>
+              開始轉檔
+            </button>
+            <button class="secondary-button" id="transcribe-button" type="button" disabled>
+              產生逐字稿
+            </button>
+            <button class="download-button" id="download-link" type="button" hidden disabled>
+              下載音檔
+            </button>
+          </div>
+
+          <section class="transcript-panel" id="transcript-panel" hidden>
+            <div class="transcript-header">
+              <p class="panel-label">逐字稿</p>
+              <div class="transcript-actions">
+                <button class="text-button" id="copy-transcript-button" type="button">
+                  複製
+                </button>
+                <button class="text-button" id="download-transcript-button" type="button">
+                  下載 TXT
+                </button>
+              </div>
+            </div>
+            <textarea id="transcript-output" readonly></textarea>
+          </section>
+
+          <section class="progress-panel" aria-live="polite">
+            <div class="progress-header">
+              <span id="status-text">等待選擇影片</span>
+              <span id="progress-percent">0%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-bar" id="progress-bar"></div>
+            </div>
+          </section>
+        </form>
+      </section>
+    </main>
+
+    <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.12.10/dist/umd/ffmpeg.js"></script>
+    <script src="https://unpkg.com/@ffmpeg/util@0.12.1/dist/umd/index.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

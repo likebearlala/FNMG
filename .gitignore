@@ -1,0 +1,6 @@
+.converter_tmp/
+__pycache__/
+*.pyc
+server-error.log
+server.log
+server.err.log
