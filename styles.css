@@ -62,7 +62,24 @@ input {
 }
 
 .command-workspace {
-  grid-template-columns: minmax(260px, 0.72fr) minmax(340px, 1.28fr);
+  grid-template-columns: minmax(260px, 0.58fr) minmax(420px, 1.42fr);
+  align-items: start;
+}
+
+.command-workspace .intro {
+  min-width: 0;
+  padding-top: 18vh;
+}
+
+.command-workspace h1 {
+  max-width: 8.5ch;
+  font-size: clamp(2.9rem, 4.8vw, 4.7rem);
+  line-height: 1.02;
+  overflow-wrap: anywhere;
+}
+
+.command-workspace .intro p:last-child {
+  max-width: 28rem;
 }
 
 .intro {
@@ -465,5 +482,21 @@ textarea {
 
   .file-panel {
     display: grid;
+  }
+}
+
+@media (max-width: 1180px) {
+  .command-workspace {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .command-workspace .intro {
+    padding-top: 0;
+  }
+
+  .command-workspace h1 {
+    max-width: 12ch;
+    font-size: clamp(2.6rem, 8vw, 4.2rem);
   }
 }
