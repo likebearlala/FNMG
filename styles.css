@@ -266,7 +266,8 @@ dd {
 }
 
 select,
-input[type="text"] {
+input[type="text"],
+input[type="url"] {
   width: 100%;
   min-height: 44px;
   padding: 0 12px;

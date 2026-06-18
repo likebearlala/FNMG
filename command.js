@@ -1,4 +1,5 @@
 const localPathInput = document.querySelector("#local-path-input");
+const driveLinkInput = document.querySelector("#drive-link-input");
 const outputPathInput = document.querySelector("#output-path-input");
 const formatSelect = document.querySelector("#format-select");
 const bitrateSelect = document.querySelector("#bitrate-select");
@@ -6,6 +7,9 @@ const sampleRateSelect = document.querySelector("#sample-rate-select");
 const transcriptLanguageSelect = document.querySelector("#transcript-language-select");
 const generateAudioCommandButton = document.querySelector("#generate-audio-command-button");
 const generateTranscriptCommandButton = document.querySelector("#generate-transcript-command-button");
+const generateDriveTranscriptCommandButton = document.querySelector(
+  "#generate-drive-transcript-command-button",
+);
 const copyCommandButton = document.querySelector("#copy-command-button");
 const commandOutput = document.querySelector("#command-output");
 const statusText = document.querySelector("#status-text");
@@ -69,6 +73,17 @@ function resolveTranscriptOutputDirectory(inputPath) {
   return requested;
 }
 
+function resolveDriveOutputDirectory() {
+  const requested = stripQuotes(outputPathInput.value);
+  if (!requested) return ".";
+
+  if (/\.[A-Za-z0-9]{2,5}$/.test(requested)) {
+    return getWindowsDirectory(requested);
+  }
+
+  return requested;
+}
+
 function requireLocalPath() {
   const inputPath = stripQuotes(localPathInput.value);
   if (!inputPath) {
@@ -78,6 +93,23 @@ function requireLocalPath() {
   }
 
   return inputPath;
+}
+
+function requireDriveLink() {
+  const driveLink = stripQuotes(driveLinkInput.value);
+  if (!driveLink) {
+    setStatus("請先輸入 Google Drive 分享連結", true);
+    driveLinkInput.focus();
+    return "";
+  }
+
+  if (!driveLink.includes("drive.google.com")) {
+    setStatus("請輸入 Google Drive 分享連結", true);
+    driveLinkInput.focus();
+    return "";
+  }
+
+  return driveLink;
 }
 
 function generateAudioCommand() {
@@ -112,6 +144,26 @@ function generateTranscriptCommand() {
   setStatus("已產生逐字稿 PowerShell 指令");
 }
 
+function generateDriveTranscriptCommand() {
+  const driveLink = requireDriveLink();
+  if (!driveLink) return;
+
+  const outputDir = resolveDriveOutputDirectory();
+  const language = transcriptLanguageSelect.value;
+  const languageOption = language === "auto" ? "" : ` --language ${language}`;
+  commandOutput.value = [
+    `$driveUrl = ${quotePowerShell(driveLink)}`,
+    `$outputDir = ${quotePowerShell(outputDir)}`,
+    `$videoFile = Join-Path $outputDir "drive-video.mp4"`,
+    `python -m pip install -U gdown openai-whisper`,
+    `New-Item -ItemType Directory -Force -Path $outputDir | Out-Null`,
+    `python -m gdown $driveUrl -O $videoFile`,
+    `python -m whisper $videoFile --model base --task transcribe${languageOption} --output_format txt --output_dir $outputDir --fp16 False`,
+  ].join("\n");
+
+  setStatus("已產生 Google Drive 逐字稿 PowerShell 指令");
+}
+
 async function copyGeneratedCommand() {
   if (!commandOutput.value) {
     setStatus("請先產生 PowerShell 指令", true);
@@ -124,4 +176,5 @@ async function copyGeneratedCommand() {
 
 generateAudioCommandButton.addEventListener("click", generateAudioCommand);
 generateTranscriptCommandButton.addEventListener("click", generateTranscriptCommand);
+generateDriveTranscriptCommandButton.addEventListener("click", generateDriveTranscriptCommand);
 copyCommandButton.addEventListener("click", copyGeneratedCommand);

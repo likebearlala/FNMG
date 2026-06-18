@@ -38,6 +38,16 @@
             </label>
 
             <label class="wide-field">
+              <span>Google Drive 分享連結</span>
+              <input
+                id="drive-link-input"
+                type="url"
+                placeholder="https://drive.google.com/file/d/.../view"
+                autocomplete="off"
+              />
+            </label>
+
+            <label class="wide-field">
               <span>輸出資料夾或音檔檔名</span>
               <input
                 id="output-path-input"
@@ -97,6 +107,9 @@
               </button>
               <button class="secondary-button" id="generate-transcript-command-button" type="button">
                 產生逐字稿指令
+              </button>
+              <button class="secondary-button" id="generate-drive-transcript-command-button" type="button">
+                產生 Drive 逐字稿指令
               </button>
               <button class="text-button" id="copy-command-button" type="button">
                 複製指令

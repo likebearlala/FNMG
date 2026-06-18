@@ -105,6 +105,8 @@ C:\Users\Me\Videos\meeting.mp4
 4. 按「複製指令」。
 5. 將指令貼到 PowerShell 執行。
 
+也可以輸入 Google Drive 分享連結，產生「下載 Drive 影片並轉逐字稿」的 PowerShell 指令。Drive 檔案需要設定為知道連結的人可檢視，或使用者本機已具備可存取該檔案的權限。
+
 轉音檔範例：
 
 ```powershell
@@ -119,6 +121,18 @@ ffmpeg -y -i $inputFile -vn -codec:a libmp3lame -ar 44100 -b:a 192k $outputFile
 $inputFile = "C:\Users\Me\Videos\meeting.mp4"
 $outputDir = "C:\Users\Me\Videos"
 python -m whisper $inputFile --model base --task transcribe --language zh --output_format txt --output_dir $outputDir --fp16 False
+```
+
+Google Drive 逐字稿範例：
+
+```powershell
+$driveUrl = "https://drive.google.com/file/d/FILE_ID/view"
+$outputDir = "."
+$videoFile = Join-Path $outputDir "drive-video.mp4"
+python -m pip install -U gdown openai-whisper
+New-Item -ItemType Directory -Force -Path $outputDir | Out-Null
+python -m gdown $driveUrl -O $videoFile
+python -m whisper $videoFile --model base --task transcribe --language zh --output_format txt --output_dir $outputDir --fp16 False
 ```
 
 ## API
