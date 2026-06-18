@@ -132,13 +132,15 @@ $videoFile = Join-Path $outputDir "drive-video.mp4"
 python -m pip install -U gdown openai-whisper
 New-Item -ItemType Directory -Force -Path $outputDir | Out-Null
 python -m gdown --fuzzy $driveUrl -O $videoFile
-if ($LASTEXITCODE -ne 0) { throw "Google Drive 下載失敗：請確認檔案已設為「知道連結的任何人可檢視」，或 Drive 下載次數沒有超限。" }
-if (!(Test-Path $videoFile) -or ((Get-Item $videoFile).Length -eq 0)) { throw "Google Drive 下載失敗：沒有產生影片檔，請檢查連結權限。" }
+if ($LASTEXITCODE -ne 0) { throw "Google Drive 下載失敗：請確認檔案已設為「知道連結的任何人可檢視」，且擁有者允許檢視者下載；如果訊息提到 owner and editors，代表 Drive 禁止檢視者下載。" }
+if (!(Test-Path $videoFile) -or ((Get-Item $videoFile).Length -eq 0)) { throw "Google Drive 下載失敗：沒有產生影片檔，請檢查連結權限與下載權限。" }
 python -m whisper $videoFile --model base --task transcribe --language zh --output_format txt --output_dir $outputDir --fp16 False
 if ($LASTEXITCODE -ne 0) { throw "Whisper 逐字稿失敗，請確認影片可播放且 FFmpeg 可讀取。" }
 ```
 
 如果出現 `Cannot retrieve the public link of the file`，代表 `gdown` 無法下載該 Drive 檔案。通常需要把 Drive 分享權限改成「知道連結的任何人可檢視」，或等 Google Drive 下載限制解除。
+
+如果出現 `Only the owner and editors can download this file`，代表檢視者被禁止下載。檔案擁有者需要在 Google Drive 分享設定中允許檢視者下載、列印或複製，否則 `gdown` 和本工具產生的指令都無法下載該檔案。
 
 ## API
 
