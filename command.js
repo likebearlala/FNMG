@@ -152,13 +152,17 @@ function generateDriveTranscriptCommand() {
   const language = transcriptLanguageSelect.value;
   const languageOption = language === "auto" ? "" : ` --language ${language}`;
   commandOutput.value = [
+    `$ErrorActionPreference = "Stop"`,
     `$driveUrl = ${quotePowerShell(driveLink)}`,
     `$outputDir = ${quotePowerShell(outputDir)}`,
     `$videoFile = Join-Path $outputDir "drive-video.mp4"`,
     `python -m pip install -U gdown openai-whisper`,
     `New-Item -ItemType Directory -Force -Path $outputDir | Out-Null`,
-    `python -m gdown $driveUrl -O $videoFile`,
+    `python -m gdown --fuzzy $driveUrl -O $videoFile`,
+    `if ($LASTEXITCODE -ne 0) { throw "Google Drive 下載失敗：請確認檔案已設為「知道連結的任何人可檢視」，或 Drive 下載次數沒有超限。" }`,
+    `if (!(Test-Path $videoFile) -or ((Get-Item $videoFile).Length -eq 0)) { throw "Google Drive 下載失敗：沒有產生影片檔，請檢查連結權限。" }`,
     `python -m whisper $videoFile --model base --task transcribe${languageOption} --output_format txt --output_dir $outputDir --fp16 False`,
+    `if ($LASTEXITCODE -ne 0) { throw "Whisper 逐字稿失敗，請確認影片可播放且 FFmpeg 可讀取。" }`,
   ].join("\n");
 
   setStatus("已產生 Google Drive 逐字稿 PowerShell 指令");
