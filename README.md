@@ -129,15 +129,18 @@ Google Drive 逐字稿範例：
 & {
 $ErrorActionPreference = "Stop"
 $driveUrl = "https://drive.google.com/file/d/FILE_ID/view"
-$outputDir = "."
+$outputDir = "$env:USERPROFILE\Desktop\whisper-output"
 $videoFile = Join-Path $outputDir "drive-video.mp4"
 python -m pip install -U gdown openai-whisper
 New-Item -ItemType Directory -Force -Path $outputDir | Out-Null
 python -m gdown $driveUrl -O $videoFile
 if ($LASTEXITCODE -ne 0) { throw "Google Drive 下載失敗：請確認檔案已設為「知道連結的任何人可檢視」，且擁有者允許檢視者下載；如果訊息提到 owner and editors，代表 Drive 禁止檢視者下載。" }
 if (!(Test-Path $videoFile) -or ((Get-Item $videoFile).Length -eq 0)) { throw "Google Drive 下載失敗：沒有產生影片檔，請檢查連結權限與下載權限。" }
+where.exe ffmpeg | Out-Null
+if ($LASTEXITCODE -ne 0) { throw "找不到 FFmpeg，請先安裝 FFmpeg 並確認已加入 PATH。" }
 python -m whisper $videoFile --model base --task transcribe --language zh --output_format txt --output_dir $outputDir --fp16 False
 if ($LASTEXITCODE -ne 0) { throw "Whisper 逐字稿失敗，請確認影片可播放且 FFmpeg 可讀取。" }
+Write-Host "完成！逐字稿應該在：$outputDir"
 }
 ```
 
